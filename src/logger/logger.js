@@ -68,6 +68,9 @@ class Logger extends EventEmitter {
  */
 function doRequest(logger, host, port, path, component, moduleName, level, operation, message) {
 
+    if (!host || !port || !path)
+        throw new Error('Debe proporcionar el host, puerto y una ruta, por ej: http://localhost:3000/logs');
+
     // request options.
     const options = {
         host: host,

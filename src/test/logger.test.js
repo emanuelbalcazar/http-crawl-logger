@@ -2,7 +2,6 @@ const assert = require('assert');
 const ServerMock = require('mock-http-server');
 const Logger = require('../logger/logger');
 
-const logger = new Logger('test', 'localhost', 9000, '/api/logs');
 const server = new ServerMock({ host: "localhost", port: 9000 });
 
 server.on({
@@ -24,15 +23,25 @@ describe('Logger Test', () => {
     after((done) => {
         setTimeout(function () {
             server.stop(done);
-        }, 400);
+        }, 500);
     });
 
     it('Run the logger correctly', () => {
+        const logger = new Logger('test', 'localhost', 9000, '/api/logs');
         let message = Math.random().toString();
+
         logger.info('logger.test', 'run', message);
 
         logger.once('logged', (data) => {
             assert.equal(message, JSON.parse(data).message);
         });
+    });
+
+    it('Run the logger erroneously', () => {
+        try {
+            const logger = new Logger('test', 'localhost', null, null);
+        } catch (error) {
+            assert.ifError(error);
+        }
     });
 });
