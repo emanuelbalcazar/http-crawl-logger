@@ -10,7 +10,7 @@ https://www.npmjs.com/package/usam-crawler-logger
 Ejecutar
 
 ```
-npm install --save crawl-logger
+npm install --save usam-crawler-logger
 ```
 
 ## Uso
