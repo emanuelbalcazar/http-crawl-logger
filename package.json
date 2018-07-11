@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/emanuelbalcazar/crawl-logger.git"
+        "url": "git+https://github.com/emanuelbalcazar/http-crawl-logger.git"
     },
     "keywords": [
         "logger",
@@ -19,9 +19,9 @@
     "author": "Carlos Emanuel Balcazar",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/emanuelbalcazar/crawl-logger/issues"
+        "url": "https://github.com/emanuelbalcazar/http-crawl-logger/issues"
     },
-    "homepage": "https://github.com/emanuelbalcazar/crawl-logger#readme",
+    "homepage": "https://github.com/emanuelbalcazar/http-crawl-logger#readme",
     "devDependencies": {
         "chai": "^4.1.2",
         "mocha": "^5.2.0",
