@@ -1,8 +1,8 @@
-# Crawl Logger
+# Usam Crawler Logger
 
 Implementación personalizada de un logger, utilizando como transporte el protocolo http.
 
-https://www.npmjs.com/package/crawl-logger
+https://www.npmjs.com/package/usam-crawler-logger
 
 
 ## Instalación
@@ -16,6 +16,6 @@ npm install --save crawl-logger
 ## Uso
 
 ```javascript
-const Logger = require('crawl-logger');
+const Logger = require('usam-crawler-logger');
 const logger = new Logger(name, host, port, path);
 ```
