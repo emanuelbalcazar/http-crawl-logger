@@ -1,5 +1,5 @@
 {
-    "name": "usam-crawler-logger",
+    "name": "http-crawl-logger",
     "version": "1.0.1",
     "description": "customized logger using the http protocol as transport",
     "main": "./src/index.js",
