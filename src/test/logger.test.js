@@ -28,11 +28,12 @@ describe('Logger Test', () => {
 
     it('Run the logger correctly', () => {
         const logger = new Logger('test', 'localhost', 9000, '/api/logs');
+        logger.module = 'test';
+
         let message = Math.random().toString();
+        logger.info('run', message);
 
-        logger.info('logger.test', 'run', message);
-
-        logger.once('logged', (data) => {
+        logger.on('logged', (data) => {
             assert.equal(message, JSON.parse(data).message);
         });
     });

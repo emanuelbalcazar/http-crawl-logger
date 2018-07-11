@@ -1,6 +1,6 @@
 {
     "name": "http-crawl-logger",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "customized logger using the http protocol as transport",
     "main": "./src/index.js",
     "scripts": {

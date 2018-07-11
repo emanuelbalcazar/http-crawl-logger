@@ -25,36 +25,32 @@ class Logger extends EventEmitter {
         this.path = path;
     }
 
-    /**
-     * Sets the name of the module that uses the logger.
-     * @memberof Logger
-     */
-    set moduleName(name) {
+    set module(name) {
         this.moduleName = name;
     }
 
-    get moduleName() {
+    get module() {
         return this.moduleName;
     }
 
-    log(moduleName, level, operation, message) {
+    log(level, operation, message) {
         doRequest(this, this.host, this.port, this.path, this.component, this.moduleName, level, operation, message);
     }
 
-    info(moduleName, operation, message) {
-        doRequest(this, this.host, this.port, this.path, this.component, moduleName, 'info', operation, message);
+    info(operation, message) {
+        doRequest(this, this.host, this.port, this.path, this.component, this.moduleName, 'info', operation, message);
     }
 
-    error(moduleName, operation, message) {
-        doRequest(this, this.host, this.port, this.path, this.component, moduleName, 'error', operation, message);
+    error(operation, message) {
+        doRequest(this, this.host, this.port, this.path, this.component, this.moduleName, 'error', operation, message);
     }
 
-    warn(moduleName, operation, message) {
-        doRequest(this, this.host, this.port, this.path, this.component, moduleName, 'warn', operation, message);
+    warn(operation, message) {
+        doRequest(this, this.host, this.port, this.path, this.component, this.moduleName, 'warn', operation, message);
     }
 
-    debug(moduleName, operation, message) {
-        doRequest(this, this.host, this.port, this.path, this.component, moduleName, 'debug', operation, message);
+    debug(operation, message) {
+        doRequest(this, this.host, this.port, this.path, this.component, this.moduleName, 'debug', operation, message);
     }
 }
 
