@@ -1,6 +1,3 @@
-const events = require('events');
-const emmiter = new events.EventEmitter();
-
 const assert = require('assert');
 const ServerMock = require('mock-http-server');
 const Logger = require('../logger/logger');
@@ -18,20 +15,24 @@ server.on({
     }
 });
 
-describe('Test', () => {
+describe('Logger Test', () => {
 
-    beforeEach((done) => {
+    before((done) => {
         server.start(done);
+    });
+
+    after((done) => {
+        setTimeout(function () {
+            server.stop(done);
+        }, 400);
     });
 
     it('Run the logger correctly', () => {
         let message = Math.random().toString();
-        logger.info('test', 'run1', message);
+        logger.info('logger.test', 'run', message);
 
-        emmiter.on('logged', (data) => {
-            let response = JSON.stringify(data);
-            assert.equal(message, response.message);
+        logger.once('logged', (data) => {
+            assert.equal(message, JSON.parse(data).message);
         });
     });
 });
-

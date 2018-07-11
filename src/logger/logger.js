@@ -1,52 +1,62 @@
 const http = require('http');
-const events = require('events');
-const emmiter = new events.EventEmitter();
+const EventEmitter = require('events');
 
 /**
  * Simple logger that makes use of the http protocol as transport.
  * @class Logger
  * @author Carlos Emanuel Balcazar
+ * @extends {EventEmitter}
  */
-class Logger {
+class Logger extends EventEmitter {
 
     /**
-     *Creates an instance of Logger.
+     * Creates an instance of Logger.
      * @param {String} component name of the application that uses the logger.
      * @param {String} host host where the log will be sent.
      * @param {Number} port port where the log will be sent.
      * @param {String} path restful path where the log will be sent.
      * @memberof Logger
      */
-    constructor(component = '', host = 'http://localhost', port = 80, path = '/') {
+    constructor(component, host, port, path) {
+        super();
         this.component = component;
         this.host = host;
         this.port = port;
         this.path = path;
     }
 
+    /**
+     * Sets the name of the module that uses the logger.
+     * @memberof Logger
+     */
+    set moduleName(name) {
+        this.moduleName = name;
+    }
+
     log(moduleName, level, operation, message) {
-        doRequest(this.host, this.port, this.path, this.component, moduleName, level, operation, message);
+        doRequest(this, this.host, this.port, this.path, this.component, this.moduleName, level, operation, message);
     }
 
     info(moduleName, operation, message) {
-        doRequest(this.host, this.port, this.path, this.component, moduleName, 'info', operation, message);
+        doRequest(this, this.host, this.port, this.path, this.component, moduleName, 'info', operation, message);
     }
 
     error(moduleName, operation, message) {
-        doRequest(this.host, this.port, this.path, this.component, moduleName, 'error', operation, message);
+        doRequest(this, this.host, this.port, this.path, this.component, moduleName, 'error', operation, message);
     }
 
     warn(moduleName, operation, message) {
-        doRequest(this.host, this.port, this.path, this.component, moduleName, 'warn', operation, message);
+        doRequest(this, this.host, this.port, this.path, this.component, moduleName, 'warn', operation, message);
     }
 
     debug(moduleName, operation, message) {
-        doRequest(this.host, this.port, this.path, this.component, moduleName, 'debug', operation, message);
+        doRequest(this, this.host, this.port, this.path, this.component, moduleName, 'debug', operation, message);
     }
 }
 
 /**
  * Send the log through a request http.
+ * @param {Logger} logger class for event emitter.
  * @param {String} component name of the application that uses the logger.
  * @param {Number} port port where the log will be sent.
  * @param {String} path restful path where the log will be sent.
@@ -56,8 +66,9 @@ class Logger {
  * @param {String} operation operation that was being done at the time of doing the log.
  * @param {String} message information to register.
  */
-function doRequest(host, port, path, component, moduleName, level, operation, message) {
+function doRequest(logger, host, port, path, component, moduleName, level, operation, message) {
 
+    // request options.
     const options = {
         host: host,
         port: port,
@@ -66,6 +77,7 @@ function doRequest(host, port, path, component, moduleName, level, operation, me
         headers: { 'Content-Type': 'application/json' }
     }
 
+    // build the log message.
     const log = {
         component: component || 'Componente no identificado',
         moduleName: moduleName || 'Modulo no identificado',
@@ -75,6 +87,7 @@ function doRequest(host, port, path, component, moduleName, level, operation, me
         date: new Date().toLocaleString()
     }
 
+    // make a request.
     const req = http.request(options, (res) => {
         let response = "";
         res.setEncoding('utf8');
@@ -84,13 +97,13 @@ function doRequest(host, port, path, component, moduleName, level, operation, me
         });
 
         res.on('end', () => {
-            emmiter.emit('logged', response);
+            logger.emit('logged', response);
             return;
         });
     });
 
     req.on('error', (err) => {
-        emmiter.emit('error', err);
+        logger.emit('error', err);
         return;
     });
 
