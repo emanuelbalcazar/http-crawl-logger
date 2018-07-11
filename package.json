@@ -1,9 +1,10 @@
 {
     "name": "http-crawl-logger",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "customized logger using the http protocol as transport",
     "main": "./src/index.js",
     "scripts": {
+        "grunt": "node ./node_modules/grunt-cli/bin/grunt",
         "mocha": "./node_modules/mocha/bin/mocha",
         "test": "npm run mocha ./src/test/logger.test.js"
     },
@@ -24,7 +25,13 @@
     "homepage": "https://github.com/emanuelbalcazar/http-crawl-logger#readme",
     "devDependencies": {
         "chai": "^4.1.2",
+        "grunt": "^1.0.3",
+        "grunt-cli": "^1.2.0",
+        "grunt-contrib-jshint": "^1.1.0",
+        "grunt-shell": "^2.1.0",
+        "jshint-stylish": "^2.2.1",
         "mocha": "^5.2.0",
-        "mock-http-server": "^1.0.0"
+        "mock-http-server": "^1.0.0",
+        "time-grunt": "^1.4.0"
     }
 }

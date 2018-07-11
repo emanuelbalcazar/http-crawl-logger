@@ -33,6 +33,10 @@ class Logger extends EventEmitter {
         this.moduleName = name;
     }
 
+    get moduleName() {
+        return this.moduleName;
+    }
+
     log(moduleName, level, operation, message) {
         doRequest(this, this.host, this.port, this.path, this.component, this.moduleName, level, operation, message);
     }
@@ -78,7 +82,7 @@ function doRequest(logger, host, port, path, component, moduleName, level, opera
         path: path,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
-    }
+    };
 
     // build the log message.
     const log = {
@@ -88,7 +92,7 @@ function doRequest(logger, host, port, path, component, moduleName, level, opera
         operation: operation || 'Operación no identificada',
         message: message || '',
         date: new Date().toLocaleString()
-    }
+    };
 
     // make a request.
     const req = http.request(options, (res) => {
