@@ -73,7 +73,7 @@ function doRequest(logger, host, port, path, component, moduleName, level, opera
 
     // request options.
     const options = {
-        host: host,
+        host: host.replace(/(^\w+:|^)\/\//, ''),    // remove http:// or https://
         port: port,
         path: path,
         method: 'POST',
