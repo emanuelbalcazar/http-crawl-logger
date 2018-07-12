@@ -24,11 +24,29 @@ npm install --save http-crawl-logger
 
 ## Uso
 
+Primero, en el modulo principal de su aplicación, configure el logger:
+
 ```javascript
 const Logger = require('http-crawl-logger');
-const logger = new Logger(name, host, port, path);
+Logger.config(component, host, port, path);
 
-logger.module = 'test';
+```
+
+Los parametros del constructor son:
+
+* `component` - nombre de la aplicación que está utilizando el logger, pensado para diferenciar a diferentes componentes.
+* `host` - host en donde se encuentra el servidor que recibira los logs.
+* `port` - puerto en donde se encuentra el servidor que recibira los logs.
+* `path` - ruta o endpoint en donde se encuentra el servidor que recibira los logs, ej: `/api/logs`
+
+Esta configuración quedara guardada por lo cual no necesitará hacerla cada vez que necesite utilizar el logger.
+
+Luego, para utilizar el logger en cualquier otro modulo, hagalo de la siguiente manera:
+
+
+```javascript
+const Logger = require('http-crawl-logger');
+const logger = Logger.getInstance(moduleName);
 
 // use
 logger.log(level, operation, message);
@@ -41,19 +59,9 @@ logger.debug(operation, message);
 
 ```
 
-Los parametros del constructor son:
+Donde:
 
-* `name` - nombre de la aplicación que está utilizando el logger, pensado para diferentes componentes.
-* `host` - host en donde se encuentra el servidor que recibira los logs.
-* `port` - puerto en donde se encuentra el servidor que recibira los logs.
-* `path` - ruta o endpoint en donde se encuentra el servidor que recibira los logs, ej: `http://localhost:3000/logs`
-
-
-Ademas, puede especificar el modulo JS de nodejs donde se utiliza el logger:
-
-* `module` - modulo JS que está utilizando el logger, pensado para separar e identificar de cada componente los diferentes modulos.
-
-Los parametros del log son:
+* `moduleName` - modulo JS que está utilizando el logger, pensado para separar e identificar de cada componente los diferentes modulos.
 * `level` - en caso de usar `logger.log()` se le debe indicar el tipo de log, los basicos son: info, error, warn y debug.
 * `operation` - operación que se estaba realizando al momento de realizar el log.
 * `message` - mensaje a registrar.
