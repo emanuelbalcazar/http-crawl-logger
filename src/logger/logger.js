@@ -1,9 +1,6 @@
 const http = require('http');
 const EventEmitter = require('events');
 
-// for singleton design pattern.
-var _instance = null;
-
 // logger configuration.
 var _config = {
     component: '',
@@ -127,10 +124,8 @@ module.exports = {
         _config.path = path;
     },
     getInstance: (moduleName) => {
-        if (!_instance)
-            _instance = new Logger();
-
-        _instance.module = moduleName;
-        return _instance;
+        let logger = new Logger();
+        logger.module = moduleName;
+        return logger;
     }
 };
