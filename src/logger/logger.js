@@ -125,6 +125,11 @@ function doRequest(logger, config, moduleName, level, operation, message) {
     req.end();
 }
 
+/**
+ * Prepare the configuration options in case they are not present.
+ * @param {Object} options
+ * @returns options.
+ */
 function configureOptions(options) {
     _options = {
         console: (options.console != undefined) ? options.console : _options.console,
@@ -135,11 +140,20 @@ function configureOptions(options) {
     return _options;
 }
 
+/**
+ * Print the log in the console.
+ * @param {Object} log
+ */
 function printOnConsole(log) {
     let chalk = getChalk(log.level);
     console.log(chalk(`[${log.component}]: ${log.date} - ${log.level} - ${log.operation}: ${log.message}`));
 }
 
+/**
+ * Configure the chalk module and return the corresponding instance associated with the level.
+ * @param {String} level
+ * @returns {Chalk} object.
+ */
 function getChalk(level) {
     let _chalk = new chalk.constructor({ enabled: _options.colors });
 
