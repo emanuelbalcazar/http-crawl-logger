@@ -1,12 +1,18 @@
 const http = require('http');
 const EventEmitter = require('events');
+const chalk = require('chalk');
 
 // logger configuration.
 var _config = {
-    component: '',
     host: '',
     port: 80,
     path: ''
+};
+
+var _options = {
+    console: false,
+    colors: true,
+    label: '*'
 };
 
 /**
@@ -73,7 +79,7 @@ class Logger extends EventEmitter {
 function doRequest(logger, config, moduleName, level, operation, message) {
 
     // request options.
-    const options = {
+    const requestConfig = {
         host: config.host.replace(/(^\w+:|^)\/\//, ''),    // remove http:// or https://
         port: config.port,
         path: config.path,
@@ -83,7 +89,7 @@ function doRequest(logger, config, moduleName, level, operation, message) {
 
     // build the log message.
     const log = {
-        component: config.component || 'Componente no identificado',
+        component: _options.label || '*',
         moduleName: moduleName || 'Modulo no identificado',
         level: level || 'info',
         operation: operation || 'Operación no identificada',
@@ -91,8 +97,11 @@ function doRequest(logger, config, moduleName, level, operation, message) {
         date: new Date().toLocaleString()
     };
 
+    if (_options.console)
+        printOnConsole(log);
+
     // make a request.
-    const req = http.request(options, (res) => {
+    const req = http.request(requestConfig, (res) => {
         let response = "";
         res.setEncoding('utf8');
 
@@ -116,12 +125,40 @@ function doRequest(logger, config, moduleName, level, operation, message) {
     req.end();
 }
 
+function configureOptions(options) {
+    _options = {
+        console: (options.console != undefined) ? options.console : _options.console,
+        colors: (options.colors != undefined) ? options.colors : _options.colors,
+        label: options.label || ''
+    }
+
+    return _options;
+}
+
+function printOnConsole(log) {
+    let chalk = getChalk(log.level);
+    console.log(chalk(`[${log.component}]: ${log.date} - ${log.level} - ${log.operation}: ${log.message}`));
+}
+
+function getChalk(level) {
+    let _chalk = new chalk.constructor({ enabled: _options.colors });
+
+    switch (level) {
+        case 'info': return _chalk.blue;
+        case 'warn': return _chalk.yellow;
+        case 'error': return _chalk.red;
+        case 'debug': return _chalk.white;
+        default: return _chalk.cyan;
+    }
+}
+
 module.exports = {
-    config: (component, host, port, path) => {
-        _config.component = component;
+    config: (host, port, path, options) => {
         _config.host = host;
         _config.port = port;
         _config.path = path;
+        _options = configureOptions(options);
+
     },
     getInstance: (moduleName) => {
         let logger = new Logger();

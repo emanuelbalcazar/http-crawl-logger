@@ -28,16 +28,25 @@ Primero, en el modulo principal de su aplicación, configure el logger:
 
 ```javascript
 const Logger = require('http-crawl-logger');
-Logger.config(component, host, port, path);
+Logger.config(host, port, path, options);
 
 ```
 
 Los parametros del constructor son:
 
-* `component` - nombre de la aplicación que está utilizando el logger, pensado para diferenciar a diferentes componentes.
 * `host` - host en donde se encuentra el servidor que recibira los logs.
 * `port` - puerto en donde se encuentra el servidor que recibira los logs.
-* `path` - ruta o endpoint en donde se encuentra el servidor que recibira los logs, ej: `/api/logs`
+* `path` - ruta o endpoint en donde se encuentra el servidor que recibira los logs, por ejemplo: `/api/logs`
+* `options` - objeto javascript, cuyas opciones son:
+
+```javascript
+let options = {
+    console: Boolean // habilita o deshabilita la impresión de los logs por la consola, por defecto es FALSE.
+    colors: Boolean  // habilita o deshabilita los colores al imprimir en la consola, por defecto es TRUE.
+    label: String    // etiqueta personalizada, se guarda en el atributo "component" del logger, por defecto es un "*".
+};
+
+```
 
 Esta configuración quedara guardada por lo cual no necesitará hacerla cada vez que necesite utilizar el logger.
 

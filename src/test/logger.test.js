@@ -1,8 +1,6 @@
 const assert = require('assert');
 
 const Logger = require('../logger/logger');
-Logger.config('test', 'localhost', 9000, '/api/logs');
-
 const ServerMock = require('mock-http-server');
 const server = new ServerMock({ host: "localhost", port: 9000 });
 
@@ -16,9 +14,10 @@ server.on({
     }
 });
 
-describe('Logger Test', () => {
+describe('Logger test', () => {
 
     before((done) => {
+        Logger.config('localhost', 9000, '/api/logs', {});
         server.start(done);
     });
 
@@ -60,9 +59,50 @@ describe('Logger Test', () => {
     it('Correctly configuration', () => {
         let logger = Logger.getInstance('');
         let config = logger.config;
-        assert.equal(config.component, 'test');
         assert.equal(config.host, 'localhost');
         assert.equal(config.port, 9000);
         assert.equal(config.path, '/api/logs');
+    });
+});
+
+
+describe('Console option test', () => {
+    before((done) => {
+        server.start(done);
+    });
+
+    after((done) => {
+        setTimeout(function () {
+            server.stop(done);
+        }, 500);
+    });
+
+    it('Colors enabled', () => {
+        Logger.config('localhost', 9000, '/api/logs', { console: true });
+        let logger = Logger.getInstance('test suite');
+
+        logger.info('enabled', 'info message');
+        logger.warn('enabled', 'warn message');
+        logger.error('enabled', 'error message');
+        logger.debug('enabled', 'debug message');
+        logger.log('other', 'enabled', 'other message');
+    });
+
+    it('Colors disabled', () => {
+        Logger.config('localhost', 9000, '/api/logs', { console: true, colors: false });
+        let logger = Logger.getInstance('test suite');
+
+        logger.info('disabled', 'info message');
+        logger.warn('disabled', 'warn message');
+        logger.error('disabled', 'error message');
+        logger.debug('disabled', 'debug message');
+        logger.log('other', 'disabled', 'other message');
+    });
+
+    it('Label enabled', () => {
+        Logger.config('localhost', 9000, '/api/logs', { console: true, colors: true, label: 'Custom Label' });
+        let logger = Logger.getInstance('test suite');
+
+        logger.info('custom', 'info message with custom label');
     });
 });
