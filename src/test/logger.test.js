@@ -60,7 +60,7 @@ describe('Logger test', () => {
         let logger = Logger.getInstance('');
         let config = logger.config;
         assert.equal(config.host, 'localhost');
-        assert.equal(config.port, 9000);
+        assert.equal(config.port, 8000);
         assert.equal(config.path, '/api/logs');
     });
 });
